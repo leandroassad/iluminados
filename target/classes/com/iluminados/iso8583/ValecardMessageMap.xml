@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE isopackager PUBLIC
+ "-//jPOS/jPOS Generic Packager DTD 1.0//EN"
+ "http://jpos.org/dtd/generic-packager-1.0.dtd">
+<!-- ISO 8583:1993
+	Formato de mensagens da Valecard
+-->
+<isopackager>
+ <isofield
+	 id="0"
+	 length="4"
+	 name="Message Type Indicator"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+ <isofield
+	 id="1"
+	 length="16"
+	 name="Bitmap"
+	 class="org.jpos.iso.IFB_BITMAP"/>
+ <isofield
+	 id="2"
+	 length="19"
+	 name="Payware Account"
+	 class="org.jpos.iso.IFB_LLNUM"/>
+ <isofield
+	 id="3"
+	 length="6"
+	 name="Processing Code"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+ <isofield
+	 id="4"
+	 length="12"
+	 name="Transaction Amount"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+<isofield
+	 id="11"
+	 length="6"
+	 name="NSU do Terminal"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+<isofield
+	 id="12"
+	 length="6"
+	 name="Time"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+ <isofield
+	 id="13"
+	 length="4"
+	 name="Date"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+<isofield
+	 id="14"
+	 length="4"
+	 name="Expiration Date"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+<isofield
+	 id="22"
+	 length="3"
+	 pad="true"
+	 name="Point Of Service Entry Mode"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+<isofield
+	 id="23"
+	 length="3"
+	 pad="true"
+	 name="PAN Sequence Number"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+<isofield
+	 id="24"
+	 length="3"
+	 pad="true"
+	 name="NII"
+	 class="org.jpos.iso.IFB_NUMERIC"/>
+ <isofield
+	 id="35"
+	 length="37"
+	 name="Track2 Data"
+	 class="com.iluminados.iso8583.IFB_FLLHEX"/>
+ <isofield
+	 id="37"
+	 length="12"
+	 name="NSU do Host"
+	 class="org.jpos.iso.IF_CHAR"/>
+ <isofield
+	 id="38"
+	 length="6"
+	 name="Authorization identification response"
+	 class="org.jpos.iso.IF_CHAR"/>
+<isofield
+	 id="39"
+	 length="2"
+	 name="Response Code"
+	 class="org.jpos.iso.IF_CHAR"/>
+ <isofield
+	 id="41"
+	 length="8"
+	 name="Numero logico do terminal"
+	 class="org.jpos.iso.IF_CHAR"/>
+ <isofield
+	 id="42"
+	 length="15"
+	 name="Codigo do estabelecimento"
+	 class="org.jpos.iso.IF_CHAR"/>
+ <isofield
+	 id="43"
+	 length="40"
+	 name="Card Acceptor Identification Name"
+	 class="org.jpos.iso.IF_CHAR"/>
+ <isofield
+	 id="48"
+	 length="24"
+	 pad="true"
+	 name="Additional Data - PDS"
+	 class="org.jpos.iso.IFB_LLLCHAR" />
+<isofield
+	 id="52"
+	 length="8"
+	 pad="true"
+	 name="Personal Identification Number (PIN)"
+	 class="org.jpos.iso.IFB_BINARY"/>
+<isofield
+	 id="55"
+	 length="999"
+	 name="Parametros EMV"
+	 class="org.jpos.iso.IFB_LLLBINARY"/>
+ <isofield
+	 id="60"
+	 length="999"
+	 name="Additional Data"
+	 class="org.jpos.iso.IFB_LLLCHAR"/>
+ <isofield
+	 id="61"
+	 length="999"
+	 name="Additional Data"
+	 class="org.jpos.iso.IFB_LLLBINARY" />
+ <isofield
+	 id="62"
+	 length="6"
+	 name="Additional Data"
+	 class="org.jpos.iso.IFB_LLLCHAR"/>
+ <isofield
+	 id="63"
+	 length="999"
+	 name="Additional Data"
+	 class="org.jpos.iso.IFB_LLLBINARY"/>
+ <isofield
+	 id="64"
+	 length="9999"
+	 name="Additional Data"
+	 class="org.jpos.iso.IFB_LLLLBINARY"/>
+ </isopackager>
