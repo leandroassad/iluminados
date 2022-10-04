@@ -1,6 +1,7 @@
 package com.iluminados;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,7 +12,9 @@ import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOMsg;
 
 import com.iluminados.iso8583.ISO8583MessageMap;
+import com.iluminados.iso8583.MessageDispatcher;
 import com.iluminados.iso8583.NSUManager;
+import com.iluminados.iso8583.message.TesteComunicacaoMessage;
 import com.iluminados.util.BCD;
 import com.iluminados.util.Util;
 
@@ -91,8 +94,23 @@ public class Iluminados {
 		}
 	}
 	
+	public void testeConexao() {
+		MessageDispatcher dispatcher = MessageDispatcher.getInstance();
+		try {
+			dispatcher.connect();
+			byte[] b = { 0x02, 0x0A, 0x12, 0x22 };
+			dispatcher.dispatch(b);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			dispatcher.disconnect();
+		}
+	}
+	
 	public void testeComunicacao() {
-		
+		TesteComunicacaoMessage teste = new TesteComunicacaoMessage();
+		teste.processMessage();
 	}
 	
 	public void logISO8583Message(ISOMsg msg) {
