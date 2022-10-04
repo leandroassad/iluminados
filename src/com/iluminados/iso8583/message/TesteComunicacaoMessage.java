@@ -51,10 +51,9 @@ public class TesteComunicacaoMessage extends AbstractISO8583Message {
 						
 			requestMsg.set(61,sf61.pack());
 			
-			
 			byte [] requestBytes = requestMsg.pack();
 			
-			log.info("Request = " + BCD.BCDtoString(requestBytes));
+			log.info("Request ISO Puro = " + BCD.BCDtoString(requestBytes));
 			logISO8583Message(requestMsg);
 			
 			byte [] responseBytes = dispatcher.dispatch(requestBytes);
@@ -66,6 +65,15 @@ public class TesteComunicacaoMessage extends AbstractISO8583Message {
 				log.info("Response = " + BCD.BCDtoString(responseBytes));
 				respMsg.unpack(responseBytes);
 				logISO8583Message(respMsg);
+				
+				String respCode = respMsg.getString(39);
+				if (respCode.equals("00")) {
+					log.info("Teste de comunicação com sucesso!!!!");
+					log.info("NSUHost: " + respMsg.getString(37));
+				}
+				else {
+					log.info("Teste de comunicacao deu erro. RespCode = " + respCode);
+				}
 				
 				setResponse(respMsg);
 			}

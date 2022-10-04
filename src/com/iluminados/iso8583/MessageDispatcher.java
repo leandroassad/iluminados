@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.iluminados.util.BCD;
 import com.iluminados.util.ByteUtil;
 import com.iluminados.util.Util;
 
@@ -113,7 +114,9 @@ public class MessageDispatcher {
 		
 		// empacota a mensagem
 		byte [] fullRequest = pack(requestBytes);
-			
+		
+		log.info("Request completo ao TX = " + BCD.BCDtoString(fullRequest));
+		
 		log.info("Enviando requisição");
 		out.write(fullRequest);
 		log.info("Enviado com sucesso. Aguardando resposta");
@@ -124,7 +127,7 @@ public class MessageDispatcher {
 		byte [] lenBytes = new byte[2];
 		int n  = in.read(lenBytes);
 	
-		log.info("Númer de Bytes de tamanho recebidos: " + n + " Bytes = " + Integer.toHexString(lenBytes[0]&0xFF) + " " + Integer.toHexString(lenBytes[1]&0xFF));
+		log.info("Número de Bytes de tamanho recebidos: " + n + " Bytes = " + Integer.toHexString(lenBytes[0]&0xFF) + " " + Integer.toHexString(lenBytes[1]&0xFF));
 		
 		if (n == -1) {
 			log.info("Falha recebendo bytes do host");
@@ -132,9 +135,12 @@ public class MessageDispatcher {
 		}
 		
 		// Le o restante
-		int len = Util.byteToInt(lenBytes, Util.LSB_MSB_ORDER);				
+		int len = Util.byteToInt(lenBytes, Util.LSB_MSB_ORDER);	
+		log.info("Numero de bytes a ler do TX: " + len);
 		byte [] recv = new byte[len];
 		int nRead = Util.readBytes(sock, recv);
+		
+		log.info("Response recebido do TX = " + BCD.BCDtoString(recv));
 		
 		byte[] responseBytes = unpack(recv, len);
 		
@@ -272,6 +278,8 @@ public class MessageDispatcher {
 	protected byte [] insertTrailingBytes(byte [] request) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
+		log.info("Request ISO Antes do tratamento = " + BCD.BCDtoString(request));
+		
 		for (int i=0; i<request.length; i++) {
 			if (belongsToSpecialBytes(request[i])) {
 				byte nibble1 = (byte)((request[i] >> 4) & 0x0F);
@@ -284,7 +292,10 @@ public class MessageDispatcher {
 			else baos.write(request[i]);
 		}
 		
-		return baos.toByteArray();
+		byte[] returnBytes = baos.toByteArray();
+		log.info("Request ISO Depois do tratamento = " + BCD.BCDtoString(returnBytes));
+		
+		return returnBytes;
 	}
 	
 	/**
