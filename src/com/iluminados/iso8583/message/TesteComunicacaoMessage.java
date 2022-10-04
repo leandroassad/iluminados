@@ -23,59 +23,81 @@ public class TesteComunicacaoMessage extends AbstractISO8583Message {
 		
 	}
 	
-	public void processMessage() {
+	private byte[] generateISO8583Message() throws ISOException, IOException {
 		String serialNumber = getPinpadSerialNumber();
 		String commType = "4";
 		
-		MessageDispatcher dispatcher = MessageDispatcher.getInstance();
-		try {	
-			dispatcher.connect();
-			
-			// Prepara os campos 3, 11, 12, 13, 24, 41, 42 e 61
+		// Prepara os campos 3, 11, 12, 13, 24, 41, 42 e 61
 		
-			ISOMsg requestMsg = new ISOMsg();
-			requestMsg.setPackager(ISO8583MessageMap.getISO8583MessageMap().getPackager());
+		ISOMsg requestMsg = new ISOMsg();
+		requestMsg.setPackager(ISO8583MessageMap.getISO8583MessageMap().getPackager());
+		
+		requestMsg.setMTI(ADMINISTRATIVE_MTI);
+		requestMsg.set(3, PROCESSING_CODE);
+		requestMsg.set(11, String.valueOf(NSUManager.getInstance().getNextNSU()));
+		requestMsg.set(12, getTimeAsString());
+		requestMsg.set(13, getDateAsString());
+		requestMsg.set(24, DEFAULT_OPER_NII);
+		requestMsg.set(41, "BW000017");
+		requestMsg.set(42, "BW000017");
+		
+		SubFieldFormatter sf61 = new SubFieldFormatter();
+		sf61.addField("61", serialNumber);
+		sf61.addField("64", commType);
+					
+		requestMsg.set(61,sf61.pack());
+		
+		logISO8583Message(requestMsg);
+		
+		byte[] requestBytes = requestMsg.pack();
+		log.info("Request ISO Puro = " + BCD.BCDtoString(requestBytes));
+		
+		return requestBytes;
+	}
+	
+	private byte[] sendISO8583MessageToTX(byte[] requestBytes) throws IOException {
+		MessageDispatcher dispatcher = MessageDispatcher.getInstance();
+		dispatcher.connect();
+		byte [] responseBytes = dispatcher.dispatch(requestBytes);
+		
+		return responseBytes;
+	}
+	
+	private void handleResponse(byte[] responseBytes) throws ISOException {
+		ISOMsg respMsg = new ISOMsg();
+		respMsg.setPackager(ISO8583MessageMap.getISO8583MessageMap().getPackager());
+		
+		log.info("Response = " + BCD.BCDtoString(responseBytes));
+		respMsg.unpack(responseBytes);
+		logISO8583Message(respMsg);
+		
+		String respCode = respMsg.getString(39);
+		if (respCode.equals("00")) {
+			log.info("Teste de comunicação com sucesso!!!!");
+			log.info("NSUHost: " + respMsg.getString(37));
+		}
+		else {
+			log.info("Teste de comunicacao deu erro. RespCode = " + respCode);
+		}
+		
+		setResponse(respMsg);
+	}
+	
+	public void processMessage() {
+		
+		try {	
+			// Gera a mensagem ISO8583 para ser enviada ao TX
+			byte[] requestBytes = generateISO8583Message();
 			
-			requestMsg.setMTI(ADMINISTRATIVE_MTI);
-			requestMsg.set(3, PROCESSING_CODE);
-			requestMsg.set(11, String.valueOf(NSUManager.getInstance().getNextNSU()));
-			requestMsg.set(12, getTimeAsString());
-			requestMsg.set(13, getDateAsString());
-			requestMsg.set(24, DEFAULT_OPER_NII);
-			requestMsg.set(41, "BW000017");
-			requestMsg.set(42, "BW000017");
+			// Envia a mensagem ao TX e recebe a resposta, ou exception caso de erro ou timeout
+			byte[] responseBytes = sendISO8583MessageToTX(requestBytes);
 			
-			SubFieldFormatter sf61 = new SubFieldFormatter();
-			sf61.addField("61", serialNumber);
-			sf61.addField("64", commType);
-						
-			requestMsg.set(61,sf61.pack());
-			
-			byte [] requestBytes = requestMsg.pack();
-			
-			log.info("Request ISO Puro = " + BCD.BCDtoString(requestBytes));
-			logISO8583Message(requestMsg);
-			
-			byte [] responseBytes = dispatcher.dispatch(requestBytes);
-			
+			// Trata a resposta
 			if (responseBytes != null) {
-				ISOMsg respMsg = new ISOMsg();
-				respMsg.setPackager(ISO8583MessageMap.getISO8583MessageMap().getPackager());
-				
-				log.info("Response = " + BCD.BCDtoString(responseBytes));
-				respMsg.unpack(responseBytes);
-				logISO8583Message(respMsg);
-				
-				String respCode = respMsg.getString(39);
-				if (respCode.equals("00")) {
-					log.info("Teste de comunicação com sucesso!!!!");
-					log.info("NSUHost: " + respMsg.getString(37));
-				}
-				else {
-					log.info("Teste de comunicacao deu erro. RespCode = " + respCode);
-				}
-				
-				setResponse(respMsg);
+				handleResponse(responseBytes);
+			}
+			else {
+				log.info("Nao ha resposta..... Culpa do Nilson");
 			}
 		}
 		catch (ISOException e) {
@@ -85,7 +107,7 @@ public class TesteComunicacaoMessage extends AbstractISO8583Message {
 			e.printStackTrace();
 		}
 		finally {
-			dispatcher.disconnect();
+			MessageDispatcher.getInstance().disconnect();
 		}
 	}
 }
