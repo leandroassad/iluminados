@@ -42,7 +42,7 @@ public class TesteComunicacaoMessage extends AbstractISO8583Message {
 		requestMsg.set(42, "BW000017");
 		
 		SubFieldFormatter sf61 = new SubFieldFormatter();
-		sf61.addField("61", serialNumber);
+		sf61.addField("62", serialNumber);
 		sf61.addField("64", commType);
 					
 		requestMsg.set(61,sf61.pack());

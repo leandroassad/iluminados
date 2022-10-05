@@ -14,6 +14,7 @@ import org.jpos.iso.ISOMsg;
 import com.iluminados.iso8583.ISO8583MessageMap;
 import com.iluminados.iso8583.MessageDispatcher;
 import com.iluminados.iso8583.NSUManager;
+import com.iluminados.iso8583.message.InicializacaoMessage;
 import com.iluminados.iso8583.message.TesteComunicacaoMessage;
 import com.iluminados.util.BCD;
 import com.iluminados.util.Util;
@@ -111,6 +112,11 @@ public class Iluminados {
 	public void testeComunicacao() {
 		TesteComunicacaoMessage teste = new TesteComunicacaoMessage();
 		teste.processMessage();
+	}
+	
+	public void inicializacao() {
+		InicializacaoMessage init = new InicializacaoMessage();
+		init.processMessage();
 	}
 	
 	public void logISO8583Message(ISOMsg msg) {
