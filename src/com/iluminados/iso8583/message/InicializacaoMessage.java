@@ -111,6 +111,10 @@ public class InicializacaoMessage extends AbstractISO8583Message {
 					log.info("dataLen: " + dataLen + "(Tamanho dos dados depois do tableVersion, no formato tableOperation tableData ... tableOperation tableData)");
 					log.info("tableDataLen: " + tableDataLen + " (Tamanho de todas as tabelas juntas menos o tableOperation com 2 bytes, para cada tabela)");
 					
+					
+					if (tableId.equals("08")) {
+						log.info("Tabela 8: " + new String(tableData));
+					}
 //					TableParser parser = tableMap.getTableParser(tableId);
 //					if (parser != null) {
 //						parser.parseTable(tableVersion, tableData, tableDataLen);

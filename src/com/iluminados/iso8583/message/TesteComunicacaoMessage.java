@@ -38,8 +38,8 @@ public class TesteComunicacaoMessage extends AbstractISO8583Message {
 		requestMsg.set(12, getTimeAsString());
 		requestMsg.set(13, getDateAsString());
 		requestMsg.set(24, DEFAULT_OPER_NII);
-		requestMsg.set(41, "BW000017");
-		requestMsg.set(42, "BW000017");
+		requestMsg.set(41, "BW000032");
+		requestMsg.set(42, "BW000032");
 		
 		SubFieldFormatter sf61 = new SubFieldFormatter();
 		sf61.addField("62", serialNumber);
