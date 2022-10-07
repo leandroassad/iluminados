@@ -12,6 +12,7 @@ public class Main {
 		//iluminados.testeComunicacao();
 		//iluminados.inicializacao();
 		//iluminados.abertura();
-		iluminados.fechamento();
+		//iluminados.fechamento();
+		iluminados.pix();
 	}
 }

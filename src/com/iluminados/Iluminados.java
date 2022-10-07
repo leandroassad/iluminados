@@ -17,6 +17,8 @@ import com.iluminados.iso8583.NSUManager;
 import com.iluminados.iso8583.message.AberturaMessage;
 import com.iluminados.iso8583.message.FechamentoMessage;
 import com.iluminados.iso8583.message.InicializacaoMessage;
+import com.iluminados.iso8583.message.PIXMessage;
+import com.iluminados.iso8583.message.PIXSondaMessage;
 import com.iluminados.iso8583.message.TesteComunicacaoMessage;
 import com.iluminados.util.BCD;
 import com.iluminados.util.Util;
@@ -129,6 +131,16 @@ public class Iluminados {
 	public void fechamento() {
 		FechamentoMessage fechamento = new FechamentoMessage("0000");
 		fechamento.processMessage();
+	}
+	
+	public void pix() {
+		
+		String valor = "000000005000";
+		PIXMessage pix = new PIXMessage(valor);
+		pix.processMessage();
+		
+		PIXSondaMessage sonda = new PIXSondaMessage(valor, pix.getIdOperacao());
+		sonda.processMessage();
 	}
 	
 	public void logISO8583Message(ISOMsg msg) {

@@ -50,7 +50,7 @@ public class AberturaMessage extends AbstractISO8583Message {
 			requestMsg.set(48, "INGMove24160080009");
 			requestMsg.set(60, serialNumber.getBytes());
 			SubFieldFormatter sf61 = new SubFieldFormatter();
-			sf61.addField("62", serialNumber);
+			sf61.addField("61", serialNumber);
 			sf61.addField("64", commType);			
 			requestMsg.set(61,sf61.pack());
 			
@@ -92,6 +92,7 @@ public class AberturaMessage extends AbstractISO8583Message {
 							break;
 						case "16":
 							log.info("** DE63.16 = " + new String(data));
+							log.info("Transacao parcelada? " + (data[0] == 0x30 ? "Não" : "Sim"));
 							break;
 						case "44":
 							log.info("** DE63.44 = " + Util.prepareBytesForPrinting(sf.getData()));
